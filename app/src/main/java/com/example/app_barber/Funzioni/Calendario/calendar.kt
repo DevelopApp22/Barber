@@ -1,113 +1,67 @@
 package com.example.app_barber.Funzioni.Calendario
 
-
+import android.os.Build
+import androidx.annotation.RequiresApi
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.YearMonth
 import java.util.Calendar
+import java.util.Locale
 
-fun Calendario(year: Int,moth:Int,day: Int): Array<IntArray> {
-    //righe e colonne del calendario
-    val rows=6
-    val column=7
+@RequiresApi(Build.VERSION_CODES.O)
+fun Calendario(year: Int, month: Int): Array<Array<LocalDate?>> {
+    // Righe e colonne del calendario
+    val rows = 6
+    val columns = 7
 
-    //Creo il calendario in base al mese in cui mi trovo
-    val calendario=Calendar.getInstance()
-        .apply {
-        set(year,moth,day)
-    }
-    //Creo il calendario in base al mese precedente
-    val calendario_P=Calendar.getInstance()
-        .apply {
-            set(year,moth-1,day)
-        }
+    // Otteniamo il primo giorno del mese
+    val firstDayOfMonth = LocalDate.of(year, month, 1)
 
-    //vedo che giorno della settimana è il 1 del mese
-    val giorno_della_settimana=calendario.get(Calendar.DAY_OF_WEEK)
+    // Otteniamo l'ultimo giorno del mese
+    val lastDayOfMonth = YearMonth.of(year, month).atEndOfMonth()
 
-    //vedo quanti giorni ho nel mese che ho inserito
-    val giorni_mese=calendario.getActualMaximum(Calendar.DAY_OF_MONTH)
+    // Giorno della settimana del primo giorno del mese (Lunedì = 1, Domenica = 7)
+    val startDayOfWeek = (firstDayOfMonth.dayOfWeek.value + 6) % 7
 
-    //Calendaario del mese in base ai giorni della settimana e dal mese
-    val month = Array(rows) { IntArray(column) }
+    // Otteniamo il numero di giorni nel mese
+    val daysInMonth = lastDayOfMonth.dayOfMonth
 
-    var row=0
-    var dayCounter = 1
-    var col=giorno_della_settimana-2
+    // Creiamo un array per rappresentare il calendario del mese
+    val monthArray = Array(rows) { arrayOfNulls<LocalDate>(columns) }
 
-    //vedo quanti giorni nella prima riga sono vuoti
-    val giorni_vuoti_inizio=column-(column-col)
-    //vedo quanti giorni nelle ultime righe sono vuote
-    val giorni_vuoti_fine=(rows*column)-(giorni_mese+giorni_vuoti_inizio)
+    var currentRow = 0
+    var currentCol = startDayOfWeek
 
-    //giorni mese precedente da mettere nel calendario
-    val G_M_P=IntArray(giorni_vuoti_inizio)
-    val giorni_mese_precedente=calendario_P.getActualMaximum(Calendar.DAY_OF_MONTH)
-
-    for(i in 0 until giorni_vuoti_inizio )
-    {
-        if(i==0)
-        {
-            G_M_P[i]=giorni_mese_precedente
-        }
-        else
-            G_M_P[i]=giorni_mese_precedente-i
-    }
-
-    // Inverto gli elementi del G_M_P
-    for (i in 0 until G_M_P.size / 2) {
-        val temp = G_M_P[i]
-        G_M_P[i] = G_M_P[G_M_P.size - 1 - i]
-        G_M_P[G_M_P.size - 1 - i] = temp
-    }
-
-    //giorni mese successivo
-    val G_M_S=IntArray(giorni_vuoti_fine)
-
-    for(i in 0 until giorni_vuoti_fine )
-    {
-            G_M_S[i]=i+1
-
-    }
-
-
-    while (dayCounter <= giorni_mese) {
-        month[row][col] = dayCounter
-        dayCounter++
-        col++
-        if (col == 7) {
-            col = 0
-            row++
+    // Riempio i giorni del mese corrente
+    for (day in 1..daysInMonth) {
+        monthArray[currentRow][currentCol] = LocalDate.of(year, month, day)
+        currentCol++
+        if (currentCol == 7) {
+            currentCol = 0
+            currentRow++
         }
     }
 
-    var c=0
-
-    for (i in 0 until 7) {
-            if(month[0][i]==0){
-                month[0][i]=G_M_P[c]
-                c++
-            }
+    // Riempio i giorni vuoti del mese precedente
+    var previousMonthDay = firstDayOfMonth.minusDays(startDayOfWeek.toLong())
+    for (col in 0 until startDayOfWeek) {
+        monthArray[0][col] = previousMonthDay
+        previousMonthDay = previousMonthDay.plusDays(1)
     }
-    c=0
-    for (i in 0 until rows) {
-        for (j in 0 until 7) {
-            if (month[i][j] == 0) {
-                month[i][j] = G_M_S[c]
-                c++
+
+    // Riempio i giorni vuoti del mese successivo
+    var nextMonthDay = lastDayOfMonth.plusDays(1)
+    for (row in currentRow until rows) {
+        for (col in currentCol until columns) {
+            if (monthArray[row][col] == null) {
+                monthArray[row][col] = nextMonthDay
+                nextMonthDay = nextMonthDay.plusDays(1)
             }
         }
+        currentCol = 0
     }
-    return month
 
-    /*
-println("mese attuale=$mese_C mese precedente =$mese_P 1 giorno della settimana =$giorno_della_settimana")
-    println("Calendario mese completo riempimento")
-        for (i in 0 until rows) {
-            for (j in 0 until 7) {
-                print("${month[i][j]}\t")
-            }
-            println()
-        }
-
-*/
+    return monthArray
 }
 
 

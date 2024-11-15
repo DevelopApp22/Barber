@@ -2,6 +2,7 @@ package com.example.app_barber.Navigazione
 
 import android.text.Layout.Alignment
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,7 +18,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(altezza:Dp) {
@@ -28,11 +28,16 @@ fun TopBar(altezza:Dp) {
 
         ),
         title = {
-            Text("Dashboards", color = Color.White, textAlign = TextAlign.Center, modifier = Modifier.fillMaxSize().padding(20.dp) )
+            Text("Dashboards", color = Color.White, textAlign = TextAlign.Center, modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp) )
         }
-        , modifier = Modifier.height(altezza),
+        , modifier = Modifier
+            .height(altezza)
+            .fillMaxSize(),
 
     )
+
 
 
 }

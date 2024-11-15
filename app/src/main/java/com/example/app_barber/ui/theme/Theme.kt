@@ -3,87 +3,62 @@ package com.example.app_barber.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
-import com.example.app_barbaber.ui.theme.Pink40
-import com.example.app_barbaber.ui.theme.Pink80
-import com.example.app_barbaber.ui.theme.Purple40
-import com.example.app_barbaber.ui.theme.Purple80
-import com.example.app_barbaber.ui.theme.PurpleGrey40
-import com.example.app_barbaber.ui.theme.PurpleGrey80
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
+import com.example.app_barbaber.ui.theme.Black_Back
+import com.example.app_barbaber.ui.theme.Black_Background
+import com.example.app_barbaber.ui.theme.Blue
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80 ,
-    onPrimary= Color.Black ,
-    background = Color.Black ,
-    onBackground = Color.Black ,
-    onSurface = Color.Black ,
-    onSecondary = Color.Black,
-    onTertiary = Color.Black,
-)
+    primary = Blue, // sfondo bottone
+    onPrimary= Color.White , //testo bottone
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
-    onPrimary= Color.Black ,
-    background = Color.Black ,
-    onBackground = Color.Black ,
-    onSurface = Color.Black ,
+    secondary = Color.White,
     onSecondary = Color.Black,
+
+    tertiary = Color.White ,
     onTertiary = Color.Black,
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+
+    background = Black_Background,
+    onBackground = Color.White,
+
+    surface = Black_Background ,
+    onSurface = Color.Black ,//testo text field
+
+    surfaceVariant = Color.White,         // Textfield background
+    onSurfaceVariant = Color.Gray,        // Textfield label color
+
 )
+
+
 
 @Composable
 fun App_BarberTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+    val colors = DarkColorScheme
+    val MyShapes = Shapes(
+        small = RoundedCornerShape(16.dp),  // Per componenti piccoli come Button
+        medium = RoundedCornerShape(20.dp), // Per componenti medi come Card
+        large = RoundedCornerShape(10.dp)   // Per componenti grandi
+    )
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-        }
-    }
 
     MaterialTheme(
-        colorScheme = colorScheme,
         typography = Typography,
+        shapes = MyShapes,
+        colorScheme = colors,
         content = content
     )
+
+
 }

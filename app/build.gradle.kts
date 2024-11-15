@@ -1,6 +1,8 @@
 plugins {
+    id("com.google.gms.google-services")
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+
 }
 
 android {
@@ -47,10 +49,18 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
-
+    implementation ("androidx.compose.material:material-icons-extended:1.0.0")
+    implementation ("androidx.compose.material3:material3:1.3.0")
+    implementation("androidx.compose.animation:animation:1.7.2")
+    implementation ("androidx.compose.compiler:compiler:1.5.15")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation ("com.google.firebase:firebase-auth-ktx:22.1.1'")
+    implementation ("com.google.firebase:firebase-firestore-ktx:24.7.0")
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -60,6 +70,12 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.common.jvm)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.firebase.database.ktx)
+    implementation(libs.firebase.database)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
