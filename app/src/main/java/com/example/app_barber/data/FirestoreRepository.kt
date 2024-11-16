@@ -670,7 +670,7 @@ class FirestoreRepository {
         userRef.get().addOnSuccessListener { userSnapshot ->
             val storicoAggiornato = userSnapshot.getBoolean("storicoAggiornato") ?: false
             val lastUpdated = userSnapshot.getString("lastUpdated") ?: ""
-            val today = "2024-11-17"
+            val today = LocalDate.now().toString()
 
             Log.d("AggiornamentoStorico", "Valore di 'storicoAggiornato': $storicoAggiornato")
             Log.d("AggiornamentoStorico", "Valore di 'lastUpdated': $lastUpdated")
